@@ -9,7 +9,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Checkout the source code from your version control system (e.g., Git)
-                git 'your-git-repository-url'
+                git 'git@github.com:ceal1818/simple-api.git'
             }
         }
 
