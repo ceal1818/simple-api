@@ -11,7 +11,6 @@ pipeline {
             steps {
                 // Build your Node.js API
                 sh 'npm install'
-                sh 'npm run build'
             }
         }
 
