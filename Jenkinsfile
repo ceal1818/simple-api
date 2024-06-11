@@ -6,25 +6,18 @@ pipeline {
     }
 
     stages {
-        stage('Print Branch Name') {
+        stage('Start building app') {
             when {
-                branch 'main'
-            }
-            steps {
-                script {
-                    echo "Branch: main"
+                not {
+                    branch 'main'
                 }
             }
-        }
-
-        stage('Build') {
             steps {
                 // Build your Node.js API
                 sh 'npm install'
             }
         }
-
-        stage('Docker Build') {
+        stage('Build Docker image') {
             steps {
                 // Build Docker image for the Node.js API
                 script {
@@ -32,8 +25,50 @@ pipeline {
                 }
             }
         }
-
-        stage('Deploy') {
+        stage('Deploy in DEV') {
+            when {
+                expression {
+                    return env.BRANCH_NAME ==~ /develop|/^feature\/.*/
+                }
+            }
+            steps {
+                // Deploy Docker container
+                script {
+                    docker.withRegistry('', '') {
+                        // Stop and remove existing container
+                        sh 'docker stop sa1 || true'
+                        sh 'docker rm sa1 || true'
+                        
+                        // Run Docker container
+                        sh 'docker run -d -p 3000:3000 --name sa1 simple-api'
+                    }
+                }
+            }
+        }
+        stage('Deploy in QA') {
+            when {
+                expression {
+                    return env.BRANCH_NAME ==~ /^release\/.*/
+                }
+            }
+            steps {
+                // Deploy Docker container
+                script {
+                    docker.withRegistry('', '') {
+                        // Stop and remove existing container
+                        sh 'docker stop sa1 || true'
+                        sh 'docker rm sa1 || true'
+                        
+                        // Run Docker container
+                        sh 'docker run -d -p 3000:3000 --name sa1 simple-api'
+                    }
+                }
+            }
+        }
+        stage('Deploy in QA') {
+            when {
+                branch 'main'
+            }
             steps {
                 // Deploy Docker container
                 script {
