@@ -65,7 +65,7 @@ pipeline {
                 }
             }
         }
-        stage('Deploy in QA') {
+        stage('Deploy in PRO') {
             when {
                 branch 'main'
             }
