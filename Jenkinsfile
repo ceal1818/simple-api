@@ -7,9 +7,13 @@ pipeline {
 
     stages {
         stage('Print Branch Name') {
-            echo "Branch: ${env.BRANCH_NAME}"
+            steps {
+                script {
+                    echo "Branch: ${env.BRANCH_NAME}"
+                }
+            }
         }
-        
+
         stage('Build') {
             steps {
                 // Build your Node.js API
