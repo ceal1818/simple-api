@@ -28,7 +28,7 @@ pipeline {
         stage('Deploy in DEV') {
             when {
                 expression {
-                    return env.BRANCH_NAME ==~ /develop|/^feature\/.*/
+                    return env.BRANCH_NAME == 'develop' || env.BRANCH_NAME ==~ /^feature\/.*/
                 }
             }
             steps {
