@@ -7,9 +7,12 @@ pipeline {
 
     stages {
         stage('Print Branch Name') {
+            when {
+                branch 'main'
+            }
             steps {
                 script {
-                    echo "Branch: ${env.BRANCH_NAME}"
+                    echo "Branch: main"
                 }
             }
         }
